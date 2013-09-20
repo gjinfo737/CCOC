@@ -101,7 +101,8 @@ public class HTTPRequester {
 				if (next.equalsIgnoreCase("total"))
 					continue;
 				JSONObject jop = jsonObject.getJSONObject(next);
-				persons.add(new Person(jop.getString("fname")));
+				persons.add(new Person(jop.getString("fname"), jop
+						.getString("lname")));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

@@ -4,18 +4,20 @@ import org.apache.commons.lang.WordUtils;
 
 public class Person {
 
-	private final String name;
+	private final String firstName;
+	private final String lastName;
 
-	public Person(String name) {
-		this.name = name;
+	public Person(String firstName, String lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
 	public String toString() {
-		return format(name);
+		return WordUtils.capitalizeFully(fullName());
 	}
 
-	private String format(String _name) {
-		return WordUtils.capitalizeFully(_name);
+	private String fullName() {
+		return String.format("%s %s", firstName, lastName);
 	}
 
 }
