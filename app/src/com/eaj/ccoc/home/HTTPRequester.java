@@ -2,6 +2,7 @@ package com.eaj.ccoc.home;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,6 +14,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -24,12 +26,21 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.eaj.ccoc.login.Login;
+
 public class HTTPRequester {
 
+	private static final String JSON_KEY_LOGIN_TEST = "test";
+	private static final String POST_NAME_PASSWORD = "p";
+	private static final String POST_NAME_USERNAME = "l";
 	private static final String URL_DIRECTORY = "http://allenjames.net/ccoc_directory/php/svc_user.php?method=get_directory";
 	private static final String URL_LOGIN = "http://allenjames.net/ccoc_directory/php/svc_user.php?method=login";
-	private static final String TEST_PASSWORD = "7u8i9o0p";
-	private static final String TEST_USERNAME = "granjam";
+
+	private static HttpClient httpclient;
+
+	public static void disposeClient() {
+		httpclient = null;
+	}
 
 	public void getDirectory(final Directory directory) throws JSONException,
 			IOException, URISyntaxException {
@@ -49,6 +60,12 @@ public class HTTPRequester {
 				} catch (URISyntaxException e) {
 					error = true;
 					e.printStackTrace();
+				} catch (IllegalStateException e) {
+					error = true;
+					e.printStackTrace();
+				} catch (JSONException e) {
+					error = true;
+					e.printStackTrace();
 				}
 				if (error)
 					onCompleteGetDirectory(directory, "{}");
@@ -56,6 +73,22 @@ public class HTTPRequester {
 			}
 		});
 		req.start();
+	}
+
+	public boolean login(Login login) {
+		try {
+			loginClient(login);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 	private void onCompleteGetDirectory(Directory directory, String json) {
@@ -77,10 +110,10 @@ public class HTTPRequester {
 	}
 
 	private String requestDirectory() throws MalformedURLException,
-			IOException, URISyntaxException {
+			IOException, URISyntaxException, IllegalStateException,
+			JSONException {
 		Log.i("", "requesting");
 
-		HttpClient httpclient = getLoggedInClient();
 		HttpResponse response = httpclient.execute(new HttpGet(new URI(
 				URL_DIRECTORY)));
 		StatusLine statusLine = response.getStatusLine();
@@ -97,30 +130,35 @@ public class HTTPRequester {
 		}
 	}
 
-	private HttpClient getLoggedInClient() throws IllegalStateException,
-			IOException {
-		HttpClient httpclient = new DefaultHttpClient();
-
+	private static boolean loginClient(final Login login)
+			throws UnsupportedEncodingException, IOException,
+			ClientProtocolException, JSONException {
+		httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(URL_LOGIN);
-		// Add your data
-		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-		nameValuePairs.add(new BasicNameValuePair("l", TEST_USERNAME));
-		nameValuePairs.add(new BasicNameValuePair("p", TEST_PASSWORD));
-		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-		// Execute HTTP Post Request
+		httppost.setEntity(new UrlEncodedFormEntity(createLoginPairs(login)));
 		HttpResponse response = httpclient.execute(httppost);
-
 		StatusLine statusLine = response.getStatusLine();
 		if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			response.getEntity().writeTo(out);
+			JSONObject jsonob = new JSONObject(out.toString());
 			out.close();
-			return httpclient;
+			return jsonob.getInt(JSON_KEY_LOGIN_TEST) == 1;
 		} else {
 			// Closes the connection.
 			response.getEntity().getContent().close();
 			throw new IOException(statusLine.getReasonPhrase());
 		}
 	}
+
+	private static List<NameValuePair> createLoginPairs(final Login login)
+			throws UnsupportedEncodingException {
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+		nameValuePairs.add(new BasicNameValuePair(POST_NAME_USERNAME, login
+				.getUsername()));
+		nameValuePairs.add(new BasicNameValuePair(POST_NAME_PASSWORD, login
+				.getPassword()));
+		return nameValuePairs;
+	}
+
 }
