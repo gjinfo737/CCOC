@@ -44,8 +44,7 @@ public class HTTPRequester {
 		httpclient = null;
 	}
 
-	public void getDirectory(final Directory directory) throws JSONException,
-			IOException, URISyntaxException {
+	public void getDirectory(final Directory directory) throws JSONException, IOException, URISyntaxException {
 		Thread req = new Thread(new Runnable() {
 			public void run() {
 				boolean error = false;
@@ -102,10 +101,33 @@ public class HTTPRequester {
 				String next = keys.next().toString();
 				if (next.equalsIgnoreCase("total"))
 					continue;
+
 				JSONObject jop = jsonObject.getJSONObject(next);
-				persons.add(new Person(jop.getString("fname"), jop
-						.getString("lname"), UserInfo.fromJson(jop
-						.getJSONObject("user_info"))));
+				JSONObject jsonObjUserInfo = null;
+				String fname = "?";
+				String lname = "?";
+				try {
+					jsonObjUserInfo = jop.getJSONObject("user_info");
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+					jsonObjUserInfo = null;
+				}
+				try {
+					fname = jop.getString("fname");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				try {
+					lname = jop.getString("lname");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				if (fname.equalsIgnoreCase("iyore")) {
+					Log.e("", "23452345e*(&^*(%^");
+				}
+
+				persons.add(new Person(fname, lname, UserInfo.fromJson(jsonObjUserInfo)));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -113,11 +135,8 @@ public class HTTPRequester {
 		directory.onDirectoryRetrieved(persons);
 	}
 
-	private String requestDirectory() throws MalformedURLException,
-			IOException, URISyntaxException, IllegalStateException,
-			JSONException {
-		HttpResponse response = httpclient.execute(new HttpGet(new URI(
-				URL_DIRECTORY)));
+	private String requestDirectory() throws MalformedURLException, IOException, URISyntaxException, IllegalStateException, JSONException {
+		HttpResponse response = httpclient.execute(new HttpGet(new URI(URL_DIRECTORY)));
 		StatusLine statusLine = response.getStatusLine();
 		if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -132,9 +151,7 @@ public class HTTPRequester {
 		}
 	}
 
-	private static boolean loginClient(final Login login)
-			throws UnsupportedEncodingException, IOException,
-			ClientProtocolException, JSONException {
+	private static boolean loginClient(final Login login) throws UnsupportedEncodingException, IOException, ClientProtocolException, JSONException {
 		httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(URL_LOGIN);
 		httppost.setEntity(new UrlEncodedFormEntity(createLoginPairs(login)));
@@ -153,13 +170,10 @@ public class HTTPRequester {
 		}
 	}
 
-	private static List<NameValuePair> createLoginPairs(final Login login)
-			throws UnsupportedEncodingException {
+	private static List<NameValuePair> createLoginPairs(final Login login) throws UnsupportedEncodingException {
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-		nameValuePairs.add(new BasicNameValuePair(POST_NAME_USERNAME, login
-				.getUsername()));
-		nameValuePairs.add(new BasicNameValuePair(POST_NAME_PASSWORD, login
-				.getPassword()));
+		nameValuePairs.add(new BasicNameValuePair(POST_NAME_USERNAME, login.getUsername()));
+		nameValuePairs.add(new BasicNameValuePair(POST_NAME_PASSWORD, login.getPassword()));
 		return nameValuePairs;
 	}
 

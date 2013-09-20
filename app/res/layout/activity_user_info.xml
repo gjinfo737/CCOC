@@ -18,7 +18,15 @@
         android:layout_marginTop="24dp"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
+   <TextView
+        android:id="@+id/tv_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_name"
+        android:layout_below="@+id/tv_name"
+        android:layout_marginTop="25dp"
+        android:text="email"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
     <TextView
         android:id="@+id/tv_phone_mobile"
         android:layout_width="wrap_content"
@@ -26,17 +34,27 @@
         android:layout_alignLeft="@+id/tv_email"
         android:layout_below="@+id/tv_email"
         android:layout_marginTop="29dp"
-        android:text="Medium Text"
+        android:text="mobile"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/tv_email"
+      <TextView
+        android:id="@+id/tv_phone_work"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_name"
-        android:layout_below="@+id/tv_name"
-        android:layout_marginTop="25dp"
-        android:text="Medium Text"
+        android:layout_alignLeft="@+id/tv_email"
+        android:layout_below="@+id/tv_email"
+        android:layout_marginTop="60dp"
+        android:text="work"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+        android:id="@+id/tv_phone_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_email"
+        android:layout_below="@+id/tv_email"
+        android:layout_marginTop="90dp"
+        android:text="home"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+ 
 
 </RelativeLayout>
