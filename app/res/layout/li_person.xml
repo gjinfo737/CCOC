@@ -6,6 +6,7 @@
     tools:context=".HomeActivity" >
 
     <TextView
+        android:padding="15dp"
         android:id="@+id/tv_li_person"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

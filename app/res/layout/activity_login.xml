@@ -15,7 +15,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="116dp"
-        android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -25,7 +24,6 @@
         android:layout_alignRight="@+id/tv_username"
         android:layout_below="@+id/tv_username"
         android:layout_marginTop="20dp"
-        android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
@@ -35,6 +33,6 @@
         android:layout_below="@+id/tv_password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="28dp"
-        android:text="Button" />
+        android:text="Login" />
 
 </RelativeLayout>
