@@ -1,6 +1,6 @@
 package com.eaj.ccoc.login;
 
-import com.eaj.ccoc.home.HTTPRequester;
+import com.eaj.ccoc.dal.HTTPRequester;
 
 public class Login {
 

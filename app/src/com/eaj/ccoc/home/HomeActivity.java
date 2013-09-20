@@ -6,13 +6,19 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RelativeLayout;
 
 import com.eaj.ccoc.R.id;
 import com.eaj.ccoc.R.layout;
+import com.eaj.ccoc.dal.Directory;
+import com.eaj.ccoc.dal.HTTPRequester;
+import com.eaj.ccoc.dal.dao.Person;
+import com.eaj.ccoc.home.PersonListWidget.IOnPersonSelectedListener;
+import com.eaj.ccoc.userinfo.UserInfoActivity;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends Activity implements IOnPersonSelectedListener {
 
 	private PersonListWidget personListWidget;
 	private Directory directory;
@@ -31,7 +37,7 @@ public class HomeActivity extends Activity {
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		personListWidget = new PersonListWidget(this, directory);
+		personListWidget = new PersonListWidget(this, directory, this);
 		RelativeLayout mainContainer = (RelativeLayout) findViewById(id.home_main_container);
 		mainContainer.addView(personListWidget.getView());
 	}
@@ -42,5 +48,13 @@ public class HomeActivity extends Activity {
 				personListWidget.refresh();
 			}
 		});
+	}
+
+	@Override
+	public void onSelectPerson(Person person) {
+		UserInfoActivity.setPerson(person);
+		Intent intent = new Intent(getApplicationContext(),
+				UserInfoActivity.class);
+		startActivity(intent);
 	}
 }

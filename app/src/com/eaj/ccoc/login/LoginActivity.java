@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.eaj.ccoc.R.layout;
-import com.eaj.ccoc.home.HTTPRequester;
+import com.eaj.ccoc.dal.HTTPRequester;
 import com.eaj.ccoc.home.HomeActivity;
 
 public class LoginActivity extends Activity {

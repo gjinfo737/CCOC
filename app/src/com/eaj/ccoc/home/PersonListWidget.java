@@ -7,6 +7,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.eaj.ccoc.R.layout;
+import com.eaj.ccoc.dal.Directory;
+import com.eaj.ccoc.dal.dao.Person;
 
 public class PersonListWidget {
 
@@ -14,11 +16,17 @@ public class PersonListWidget {
 	private PersonListAdapter adapter;
 	private RelativeLayout view;
 
-	public PersonListWidget(Activity activity, Directory directory) {
+	public interface IOnPersonSelectedListener {
+		public void onSelectPerson(Person person);
+	}
+
+	public PersonListWidget(Activity activity, Directory directory,
+			IOnPersonSelectedListener personSelectedListener) {
 		LayoutInflater layoutInflater = activity.getLayoutInflater();
 		view = (RelativeLayout) layoutInflater.inflate(
 				layout.person_list_widget, null);
-		adapter = new PersonListAdapter(layoutInflater, directory);
+		adapter = new PersonListAdapter(layoutInflater, directory,
+				personSelectedListener);
 		listView = new ListView(activity);
 		listView.setAdapter(adapter);
 		view.addView(listView);

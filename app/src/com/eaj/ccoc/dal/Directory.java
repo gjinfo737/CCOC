@@ -1,4 +1,4 @@
-package com.eaj.ccoc.home;
+package com.eaj.ccoc.dal;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
+
+import com.eaj.ccoc.dal.dao.Person;
+import com.eaj.ccoc.home.HomeActivity;
 
 import android.util.Log;
 

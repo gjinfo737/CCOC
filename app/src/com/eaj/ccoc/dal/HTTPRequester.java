@@ -1,4 +1,4 @@
-package com.eaj.ccoc.home;
+package com.eaj.ccoc.dal;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,6 +26,8 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.eaj.ccoc.dal.dao.Person;
+import com.eaj.ccoc.dal.dao.UserInfo;
 import com.eaj.ccoc.login.Login;
 
 public class HTTPRequester {
@@ -102,7 +104,8 @@ public class HTTPRequester {
 					continue;
 				JSONObject jop = jsonObject.getJSONObject(next);
 				persons.add(new Person(jop.getString("fname"), jop
-						.getString("lname")));
+						.getString("lname"), UserInfo.fromJson(jop
+						.getJSONObject("user_info"))));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -113,8 +116,6 @@ public class HTTPRequester {
 	private String requestDirectory() throws MalformedURLException,
 			IOException, URISyntaxException, IllegalStateException,
 			JSONException {
-		Log.i("", "requesting");
-
 		HttpResponse response = httpclient.execute(new HttpGet(new URI(
 				URL_DIRECTORY)));
 		StatusLine statusLine = response.getStatusLine();
