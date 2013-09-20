@@ -78,18 +78,15 @@ public class HTTPRequester {
 
 	public boolean login(Login login) {
 		try {
-			loginClient(login);
+			return loginClient(login);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
-			return false;
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
 		} catch (JSONException e) {
 			e.printStackTrace();
-			return false;
 		}
-		return true;
+		return false;
 	}
 
 	private void onCompleteGetDirectory(Directory directory, String json) {

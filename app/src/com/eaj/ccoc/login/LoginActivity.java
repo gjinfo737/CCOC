@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.eaj.ccoc.R.layout;
 import com.eaj.ccoc.dal.HTTPRequester;
@@ -24,16 +25,24 @@ public class LoginActivity extends Activity {
 	}
 
 	public void onLoginPress() {
-		login.attemptLogin(Login.TEST_USERNAME, Login.TEST_PASSWORD);
+		login.attemptLogin(loginView.getUsername(), loginView.getPassword());
 	}
 
-	public void onLoginAttemptComplete(boolean successful) {
-		if (successful) {
-			startHome();
-			finish();
-		} else {
-			Log.e("", "login failure");
-		}
+	public void onLoginAttemptComplete(final boolean successful) {
+
+		runOnUiThread(new Runnable() {
+			public void run() {
+				if (successful) {
+					startHome();
+					finish();
+				} else {
+					Log.e("", "login failure");
+					loginView.clearPassword();
+					Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
+				}
+
+			}
+		});
 
 	}
 

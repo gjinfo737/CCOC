@@ -4,8 +4,6 @@ import com.eaj.ccoc.dal.HTTPRequester;
 
 public class Login {
 
-	public static final String TEST_PASSWORD = "7u8i9o0p";
-	public static final String TEST_USERNAME = "granjam";
 	private LoginActivity activity;
 	private HTTPRequester httpRequester;
 	private String username;
@@ -21,8 +19,13 @@ public class Login {
 		this.password = password;
 		Thread loginThread = new Thread(new Runnable() {
 			public void run() {
-				boolean loginResult = httpRequester.login(Login.this);
-				activity.onLoginAttemptComplete(loginResult);
+				try {
+					boolean loginResult = httpRequester.login(Login.this);
+					activity.onLoginAttemptComplete(loginResult);
+				} catch (Exception e) {
+					e.printStackTrace();
+					activity.onLoginAttemptComplete(false);
+				}
 			}
 		});
 		loginThread.start();
